@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+.env
+
+# Node (se usar npm/yarn para o frontend)
+node_modules/
+
+# Vercel
+.vercel/

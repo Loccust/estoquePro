@@ -2,7 +2,7 @@ from flasgger import swag_from
 from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource, reqparse
 from datetime import date
-from src.models import Produto, db 
+from backend.src.models import Produto, db 
 
 produto_parser = reqparse.RequestParser()
 produto_parser.add_argument('codigo', type=str, required=True, help="O código do produto é obrigatório.")
@@ -212,7 +212,7 @@ class ProdutoResource(Resource):
     @jwt_required()
     def put(self, codigo_produto):
         try:
-            from src.models import Produto, db # Importação local
+            from backend.src.models import Produto, db # Importação local
             produto = Produto.query.get(codigo_produto)
             if not produto:
                 return {'message': f'Produto com código {codigo_produto} não encontrado.'}, 404

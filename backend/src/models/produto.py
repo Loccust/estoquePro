@@ -1,4 +1,4 @@
-from src.models.db import db
+from backend.src.models.db import db
 
 
 class Produto(db.Model):

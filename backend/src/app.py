@@ -4,11 +4,11 @@ from flask_cors import CORS
 from flask_jwt_extended import JWTManager
 from flask_restful import Api
 
-from src.auth.routes import auth_bp
-from src.config import Config
-from src.models import db
-from src.resources.produto_resource import ListaDeProdutosResource, ProdutoResource
-from src.swagger_config import swagger_config, swagger_template
+from backend.src.auth.routes import auth_bp
+from backend.src.config import Config
+from backend.src.models import db
+from backend.src.resources.produto_resource import ListaDeProdutosResource, ProdutoResource
+from backend.src.swagger_config import swagger_config, swagger_template
 
 def create_app():
     app = Flask(__name__)

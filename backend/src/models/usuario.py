@@ -2,7 +2,7 @@ import uuid
 
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from src.models.db import db
+from backend.src.models.db import db
 
 
 class Usuario(db.Model):

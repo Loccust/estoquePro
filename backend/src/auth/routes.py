@@ -2,7 +2,7 @@ from flasgger import swag_from
 from flask import Blueprint, jsonify, request
 from flask_jwt_extended import create_access_token
 
-from src.models import Usuario, db
+from backend.src.models import Usuario, db
 
 auth_bp = Blueprint('auth', __name__, url_prefix='/auth')
 

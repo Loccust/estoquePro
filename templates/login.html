@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <!-- Configuração básica do documento -->
+    <meta charset="UTF-8">
+    <title>Login - Controle de Estoque</title>
+    
+    <!-- Link para arquivo CSS externo -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- Estilos CSS incorporados -->
+    <style>
+        /* Estilo geral do corpo da página */
+        body {
+            background-color: #4e739e;               /* Cor de fundo azul */
+            font-family: Arial, sans-serif;           /* Fonte padrão */
+            display: flex;                            /* Layout flexbox */
+            justify-content: center;                  /* Centraliza horizontalmente */
+            align-items: center;                      /* Centraliza verticalmente */
+            height: 100vh;                            /* Altura total da viewport */
+        }
+        
+        /* Estilo da caixa de login */
+        .login-box {
+            background-color: #fff;                   /* Fundo branco */
+            padding: 30px 40px;                      /* Espaçamento interno */
+            border-radius: 10px;                     /* Bordas arredondadas */
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.3); /* Sombra suave */
+            width: 350px;                            /* Largura fixa */
+        }
+        
+        /* Estilo do título */
+        h2 {
+            text-align: center;                      /* Texto centralizado */
+            color: #333;                             /* Cor do texto */
+        }
+        
+        /* Estilo das labels */
+        label {
+            font-weight: bold;                       /* Texto em negrito */
+            display: block;                          /* Elemento em bloco */
+            margin-top: 15px;                        /* Espaçamento superior */
+        }
+        
+        /* Estilo dos campos de entrada */
+        input[type="text"], 
+        input[type="password"] {
+            width: 100%;                            /* Largura total */
+            padding: 8px;                           /* Espaçamento interno */
+            margin-top: 5px;                        /* Espaço acima do campo */
+            border: 1px solid #ccc;                 /* Borda cinza */
+            border-radius: 5px;                     /* Bordas arredondadas */
+        }
+        
+        /* Estilo do botão */
+        button {
+            width: 100%;                           /* Largura total */
+            margin-top: 20px;                       /* Espaço superior */
+            background-color: #333;                 /* Cor de fundo escura */
+            color: white;                           /* Texto branco */
+            padding: 10px;                          /* Espaçamento interno */
+            border: none;                           /* Sem borda */
+            border-radius: 5px;                     /* Bordas arredondadas */
+            cursor: pointer;                        /* Cursor de ponteiro */
+        }
+        
+        /* Estilo das mensagens de erro */
+        .error {
+            color: red;                             /* Texto vermelho */
+            margin-top: 10px;                       /* Espaço superior */
+            text-align: center;                    /* Texto centralizado */
+        }
+    </style>
+</head>
+<body>
+    <!-- Container principal do formulário -->
+    <div class="login-box">
+        <h2>Login</h2>
+        
+        <!-- Formulário de login com método POST -->
+        <form method="POST">
+            <!-- Campo de usuário -->
+            <label for="username">Usuário:</label>
+            <input type="text" name="username" required>  /* Campo obrigatório */
+            
+            <!-- Campo de senha -->
+            <label for="password">Senha:</label>
+            <input type="password" name="password" required>  /* Campo obrigatório */
+            
+            <!-- Botão de submissão -->
+            <button type="submit">Entrar</button>
+            
+            <!-- Seção condicional para mensagens de erro -->
+            {% if error %}
+                <p class="error">{{ error }}</p>  /* Exibe erro se existir */
+            {% endif %}
+        </form>
+    </div>
+</body>
+</html>

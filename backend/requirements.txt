@@ -1,0 +1,8 @@
+flask
+flask-restful
+flask-jwt-extended
+flask-sqlalchemy
+flask-cors
+werkzeug
+flasgger
+waitress

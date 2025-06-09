@@ -1,0 +1,189 @@
+/* Aplica o modelo de caixa border-box a todos os elementos */
+* {
+    box-sizing: border-box;
+}
+
+/* Estilos gerais do corpo da página */
+body {
+    background-image: #2356a8
+    background-size: cover; /* Cobrir toda a área visível */
+    background-attachment: fixed; /* Fixar imagem durante rolagem */
+    display: flex;
+    flex-direction: column; /* Alinhamento vertical */
+    align-items: center; /* Centralização horizontal */
+    min-height: 100vh; /* Altura mínima = altura da tela */
+    margin: 0;
+    padding: 15px;
+    font-family: 'Roboto', sans-serif; /* Fonte importada do Google */
+}
+
+/* Container principal */
+.container {
+    width: 90%; /* Largura relativa */
+    max-width: 1200px; /* Largura máxima */
+    margin: auto; /* Centralização */
+}
+
+/* Cabeçalho da aplicação */
+header {
+    background: #3b3b3b; /* Cor de fundo escura */
+    color: #fff; /* Texto branco */
+    padding: 20px;
+    text-align: center;
+    border-bottom: 5px solid #0056b3; /* Destaque azul na borda inferior */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra suave */
+    width: 100%; /* Largura total */
+}
+
+/* Título principal */
+header h1 {
+    font-size: 22px; /* Tamanho responsivo */
+}
+
+/* Subtítulos */
+h2 {
+    font-size: 18px;
+    text-align: center;
+}
+
+/* Área de botões de ação */
+.actions {
+    display: flex;
+    flex-wrap: wrap; /* Quebra de linha em telas pequenas */
+    justify-content: center; /* Centralização horizontal */
+    gap: 10px; /* Espaçamento entre elementos */
+    margin: 20px 0;
+    width: 100%;
+    max-width: 600px; /* Largura máxima */
+}
+
+/* Estilização dos botões */
+.actions button {
+    padding: 12px;
+    border: none;
+    background: #3b3b3b; /* Cor base */
+    color: #fff; /* Texto branco */
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s; /* Transição suave */
+    flex: 1; /* Distribuição igualitária */
+    min-width: 120px; /* Largura mínima */
+}
+
+/* Efeito hover nos botões */
+.actions button:hover {
+    background: #0056b3; /* Cor de destaque ao passar mouse */
+}
+
+/* Containers de formulário e inventário */
+#form-container,
+#inventory-container {
+    background: #fff; /* Fundo branco */
+    padding: 15px;
+    margin: 15px 0;
+    border-radius: 10px; /* Cantos arredondados */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra suave */
+    width: 100%;
+    max-width: 800px; /* Largura máxima */
+    overflow-x: auto; /* Rolagem horizontal em tabelas */
+}
+
+/* Elementos de formulário */
+input,
+button {
+    width: 100%; /* Largura total */
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 5px; /* Cantos arredondados */
+    border: 1px solid #ccc; /* Borda sutil */
+}
+
+/* Estilização da tabela de inventário */
+#inventory-container table {
+    width: 100%; /* Largura total */
+    border-collapse: collapse; /* Borda unificada */
+}
+
+/* Células da tabela */
+#inventory-container th,
+#inventory-container td {
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+    border: 1px solid #ccc; /* Borda sutil */
+}
+
+/* Cabeçalho da tabela */
+#inventory-container th {
+    background: #3b3b3b; /* Cor de fundo escura */
+    color: white; /* Texto branco */
+}
+
+/* Container para gráficos (se aplicável) */
+.chart-container {
+    width: 100%;
+    max-width: 500px;
+    margin: auto;
+}
+
+/* MEDIA QUERIES - RESPONSIVIDADE */
+@media screen and (max-width: 768px) {
+    .container {
+        width: 100%; /* Largura total em dispositivos móveis */
+        padding: 10px;
+    }
+
+    .actions {
+        flex-direction: column; /* Botões em coluna */
+        align-items: center;
+    }
+
+    .actions button {
+        width: 100%; /* Largura total */
+        min-width: 100%; /* Sobrescreve largura mínima */
+    }
+
+    /* Tabela com rolagem horizontal em mobile */
+    #inventory-container table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap; /* Impede quebra de linha */
+    }
+
+    /* Redução de tamanho de fontes */
+    header h1 {
+        font-size: 18px;
+    }
+
+    h2 {
+        font-size: 16px;
+    }
+}
+
+/* Estilo específico para página de login */
+.login-container {
+    background: #fff;
+    padding: 20px;
+    width: 300px;
+    margin: 100px auto; /* Centralização vertical/horizontal */
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3); /* Sombra mais pronunciada */
+    text-align: center; /* Alinhamento central */
+}
+
+/* Inputs na página de login */
+.login-container input {
+    width: 90%; /* Largura reduzida */
+    padding: 10px;
+    margin: 10px 0;
+}
+
+/* Botão de login */
+.login-container button {
+    padding: 10px 20px;
+    background-color: #007BFF; /* Azul destacado */
+    color: white;
+    border: none;
+    border-radius: 5px;
+}

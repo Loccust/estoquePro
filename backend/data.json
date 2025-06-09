@@ -1,0 +1,29 @@
+[
+    {
+        "codigo": "24595",
+        "nome": "lklkl",
+        "quantidade": 50,
+        "saida": 4,
+        "quantidadeAposSaida": 46,
+        "data": "2025-04-27",
+        "setor": "net"
+    },
+    {
+        "codigo": "24595",
+        "nome": "nhgghbv",
+        "quantidade": 600,
+        "saida": 150,
+        "quantidadeAposSaida": 450,
+        "data": "2025-04-27",
+        "setor": "sas"
+    },
+    {
+        "codigo": "245",
+        "nome": "dddd",
+        "quantidade": 95,
+        "saida": 69,
+        "quantidadeAposSaida": 26,
+        "data": "2025-04-27",
+        "setor": "asa"
+    }
+]

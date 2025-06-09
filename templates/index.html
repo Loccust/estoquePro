@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>EstoqueVision</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="static/style.css" />
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><img src="icon.svg" alt="Ícone Estoque" style="width: 24px; vertical-align: middle; margin-right: 8px;">EstoqueVision</h1>
+    </header>
+
+    <section class="actions">
+      <button class="primary-btn" onclick="showAddForm()">➕ Adicionar Item</button>
+      <button class="secondary-btn" onclick="showUpdateForm()">Visualizar Estoque</button>
+    </section>
+
+    <div class="form-container" id="form-container"></div>
+
+    <div class="inventory-container" id="inventory-container">
+      <h2>Itens no Estoque</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Código</th>
+            <th>Nome</th>
+            <th>Quantidade</th>
+            <th>Saída</th>
+            <th>Após Saída</th>
+            <th>Data</th>
+            <th>Setor</th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="estoque-body"></tbody>
+      </table>
+      <p class="footer">Lista de itens atualmente em estoque.</p>
+    </div>
+  </div>
+
+  <script>
+    const dados = [
+      { codigo: '2035', nome: 'anel', qtd: 90, saida: 7, data: '01/06/2025', setor: 'TI' },
+      { codigo: '004', nome: 'Cadeira de Escritório Premium', qtd: 10, saida: 1, data: '14/05/2024', setor: 'Mobiliário' },
+      { codigo: '003', nome: 'Monitor LED 24 polegadas', qtd: 15, saida: 2, data: '30/04/2024', setor: 'Hardware' },
+      { codigo: '002', nome: 'Mouse Sem Fio Ergonômico', qtd: 30, saida: 10, data: '11/04/2024', setor: 'TI' },
+      { codigo: 'PROD005', nome: 'teclado', qtd: 60, saida: 30, data: '01/06/2025', setor: 'ti' },
+      { codigo: '001', nome: 'Teclado Gamer RGB', qtd: 20, saida: 5, data: '09/04/2024', setor: 'TI' }
+    ];
+
+    const tbody = document.getElementById('estoque-body');
+    dados.forEach(item => {
+      const tr = document.createElement('tr');
+      const aposSaida = item.qtd - item.saida;
+      tr.innerHTML = `
+        <td><span class="code">${item.codigo}</span></td>
+        <td>${item.nome}</td>
+        <td>${item.qtd}</td>
+        <td class="out">${item.saida}</td>
+        <td class="after">${aposSaida}</td>
+        <td>${item.data}</td>
+        <td>${item.setor}</td>
+        <td>
+          <button class="edit-btn">✏️</button>
+          <button class="delete-btn">🗑️</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  </script>
+</body>
+</html>

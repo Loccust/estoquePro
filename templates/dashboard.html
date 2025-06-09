@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard de Estoque</title>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #3498db;
+            --secondary: #2ecc71;
+            --danger: #e74c3c;
+            --dark: #34495e;
+            --light: #ecf0f1;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .chart-container {
+            position: relative;
+            height: 300px;
+            width: 100%;
+        }
+        
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background-color: var(--secondary);
+            color: white;
+        }
+        
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+        }
+        
+        .btn:hover {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: var(--light);
+            font-weight: 600;
+        }
+        
+        tr:hover {
+            background-color: rgba(52, 152, 219, 0.05);
+        }
+        
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin: 20px 0;
+        }
+        
+        .form-container h2 {
+            margin-bottom: 15px;
+            color: var(--dark);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+            display: grid;
+            grid-template-columns: 150px 1fr;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        input, select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Dashboard de Estoque</h1>
+    </header>
+    
+    <div class="container">
+        <!-- Controles -->
+        <div class="controls">
+            <button class="btn btn-primary" onclick="showAddForm()">Adicionar Item</button>
+            <button class="btn btn-secondary" onclick="showUpdateForm()">Atualizar Item</button>
+            <button class="btn btn-danger" onclick="showRemoveForm()">Remover Item</button>
+            <button class="btn" onclick="viewInventory()">Atualizar Inventário</button>
+        </div>
+        
+        <!-- Form Container -->
+        <div id="form-container" class="form-container"></div>
+        
+        <!-- Inventário -->
+        <div id="inventory-container"></div>
+        
+        <!-- Dashboard de Gráficos -->
+        <h2 style="margin: 30px 0 20px;">Análise de Estoque</h2>
+        <div class="dashboard-grid">
+            <!-- Gráfico de Barras -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Estoque por Setor</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Gráfico de Pizza -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Distribuição de Itens</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Gráfico de Linha -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Movimentação Mensal</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+            
+            <!-- Gráfico de Torre -->
+            <div class="card">
+                <div class="card-header">
+                    <h3>Top Itens (Estoque)</h3>
+                </div>
+                <div class="chart-container">
+                    <canvas id="towerChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Funções CRUD (mantidas do seu código original)
+        function showAddForm() {
+            const formContainer = document.getElementById('form-container');
+            formContainer.innerHTML = `
+                <h2>Adicionar Item</h2>
+                <form id="addForm">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" id="codigo" placeholder="Código do Produto" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nome">Nome:</label>
+                        <input type="text" id="nome" placeholder="Nome do Item" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="quantidade">Quantidade:</label>
+                        <input type="number" id="quantidade" placeholder="Quantidade" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="saida">Saída:</label>
+                        <input type="number" id="saida" placeholder="Quantidade de Saída" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="data">Data:</label>
+                        <input type="date" id="data" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="setor">Setor:</label>
+                        <input type="text" id="setor" placeholder="Setor" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Adicionar</button>
+                </form>
+            `;
+            
+            document.getElementById('addForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                // ... (código de submissão)
+            });
+        }
+        
+        // ... (outras funções showUpdateForm, showRemoveForm, viewInventory)
+
+        // Inicializar gráficos quando o DOM estiver pronto
+        document.addEventListener('DOMContentLoaded', function() {
+            viewInventory();
+            initCharts();
+        });
+
+        // Função para inicializar os gráficos
+        function initCharts() {
+            // Dados de exemplo (substituir com dados reais da API)
+            const inventoryData = {
+                setores: ['Elétrica', 'Hidráulica', 'Ferramentas', 'Pintura'],
+                valores: [12000, 8500, 6200, 4300],
+                distribuicao: [35, 25, 20, 20],
+                meses: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun'],
+                entradas: [120, 95, 150, 80, 110, 130],
+                saidas: [80, 70, 110, 60, 90, 100],
+                topItens: ['Fio 2.5mm', 'Tubo PVC', 'Tinta Branca', 'Chave de Fenda', 'Lâmpada LED'],
+                estoqueItens: [850, 720, 600, 550, 480]
+            };
+
+            // Gráfico de Barras - Estoque por Setor
+            new Chart(document.getElementById('barChart'), {
+                type: 'bar',
+                data: {
+                    labels: inventoryData.setores,
+                    datasets: [{
+                        label: 'Valor em Estoque (R$)',
+                        data: inventoryData.valores,
+                        backgroundColor: [
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)',
+                            'rgba(241, 196, 15, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)',
+                            'rgba(241, 196, 15, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Pizza - Distribuição de Itens
+            new Chart(document.getElementById('pieChart'), {
+                type: 'pie',
+                data: {
+                    labels: inventoryData.setores,
+                    datasets: [{
+                        data: inventoryData.distribuicao,
+                        backgroundColor: [
+                            'rgba(231, 76, 60, 0.7)',
+                            'rgba(52, 152, 219, 0.7)',
+                            'rgba(46, 204, 113, 0.7)',
+                            'rgba(155, 89, 182, 0.7)'
+                        ],
+                        borderColor: [
+                            'rgba(231, 76, 60, 1)',
+                            'rgba(52, 152, 219, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'right'
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Linha - Movimentação Mensal
+            new Chart(document.getElementById('lineChart'), {
+                type: 'line',
+                data: {
+                    labels: inventoryData.meses,
+                    datasets: [
+                        {
+                            label: 'Entradas',
+                            data: inventoryData.entradas,
+                            borderColor: 'rgba(46, 204, 113, 1)',
+                            backgroundColor: 'rgba(46, 204, 113, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        },
+                        {
+                            label: 'Saídas',
+                            data: inventoryData.saidas,
+                            borderColor: 'rgba(231, 76, 60, 1)',
+                            backgroundColor: 'rgba(231, 76, 60, 0.1)',
+                            tension: 0.3,
+                            fill: true
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+
+            // Gráfico de Torre (barra horizontal) - Top Itens
+            new Chart(document.getElementById('towerChart'), {
+                type: 'bar',
+                data: {
+                    labels: inventoryData.topItens,
+                    datasets: [{
+                        label: 'Quantidade em Estoque',
+                        data: inventoryData.estoqueItens,
+                        backgroundColor: 'rgba(52, 152, 219, 0.7)',
+                        borderColor: 'rgba(52, 152, 219, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Função para buscar dados reais da API (exemplo)
+        async function fetchInventoryData() {
+            try {
+                const response = await fetch('/api/inventory/analytics');
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Erro ao buscar dados para gráficos:', error);
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>

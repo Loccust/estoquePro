@@ -12,12 +12,24 @@
     }
   ],
   "routes": [
-    {
-      "src": "/api/(.*)",
+ {
+      "src": "/apidocs(.*)",     // Rota para o Swagger UI do Flasgger e seus assets
       "dest": "/backend/src/main.py"
     },
     {
-      "src": "/(.*)",
+      "src": "/apispec_1.json", // Rota para o JSON da especificação OpenAPI gerado pelo Flasgger
+      "dest": "/backend/src/main.py"
+    },
+    {
+      "src": "/flasgger_static/(.*)", // Rota para os assets estáticos do Flasgger
+      "dest": "/backend/src/main.py"
+    },
+    {
+      "src": "/api/(.*)",       // Suas outras rotas de API (ex: /api/produtos)
+      "dest": "/backend/src/main.py"
+    },
+    {
+      "src": "/(.*)",           // Frontend estático
       "dest": "/public/$1"
     }
   ]

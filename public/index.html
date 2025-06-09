@@ -1445,6 +1445,9 @@
           // Exibir estoque e gráfico
           viewInventory();
           updateChart();
+        } else if(res.status === 404) {
+          errorEl.textContent = "Usuário não encontrado.";
+        
         } else {
           errorEl.textContent = data.error || "Login falhou";
         }

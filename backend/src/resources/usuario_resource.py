@@ -3,7 +3,7 @@ from flask_jwt_extended import get_jwt_identity, jwt_required
 from flask_restful import Resource
 from flask import jsonify  # Importe jsonify para respostas consistentes
 
-from backend.src.models import Usuario
+from src.models import Usuario
 
 
 class ProfileResource(Resource):

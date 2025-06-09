@@ -1,7 +1,8 @@
 flask
 flask-restful
 flask-jwt-extended
-flask-sqlalchemy
+flask_pymongo
+pymongo
 flask-cors
 werkzeug
 flasgger

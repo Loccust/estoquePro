@@ -13,18 +13,6 @@
   ],
   "routes": [
     {
-      "src": "/apidocs(.*)",
-      "dest": "/backend/main.py"
-    },
-    {
-      "src": "/apispec_1.json",
-      "dest": "/backend/main.py"
-    },
-    {
-      "src": "/flasgger_static/(.*)",
-      "dest": "/backend/main.py"
-    },
-    {
       "src": "/api/(.*)",      
       "dest": "/backend/main.py"
     },

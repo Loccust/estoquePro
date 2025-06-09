@@ -960,7 +960,9 @@
     // Dados de estoque
     let inventoryData = [];
 
-    const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:5000';
+    const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                             ? 'http://127.0.0.1:5000' // Sua API Flask local
+                             : '';
 
     window.onload = function () {
       verifyAccess();

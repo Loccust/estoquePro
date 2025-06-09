@@ -959,6 +959,45 @@
     
     // Dados de estoque
     let inventoryData = [];
+
+    const API_BASE_URL = process.env.NODE_ENV === 'production' ? '' : 'http://127.0.0.1:5000';
+
+    window.onload = function () {
+      verifyAccess();
+    }
+
+    function verifyAccess() {
+      const token = localStorage.getItem("access_token");
+      if (token) {
+        if(isTokenExpired(token))
+          localStorage.removeItem("access_token");
+        else
+          showSystemContent();
+      }
+    }
+
+    function parseJwt(token) {
+      try {
+        const base64Url = token.split('.')[1];
+        const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+        const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+          return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+        }).join(''));
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function isTokenExpired(token) {
+      const payload = parseJwt(token);
+      console.log({payload})
+      if (!payload || !payload.exp) return true;
+      const currentTime = Math.floor(Date.now());
+      const expTime = payload.exp * 1000;
+      console.log("expira em: ", expTime)
+      return expTime < currentTime;
+    }
     
     // Função para mostrar toast
     function showToast(message, isError = false) {
@@ -1374,7 +1413,7 @@
       document.getElementById('login-container').style.display = 'none';
       document.getElementById('register-container').style.display = 'block';
     }
-
+    
     // Função de login
     async function login() {
       const email = document.getElementById('username').value;
@@ -1387,21 +1426,26 @@
       }
       
       try {
-        const user = await database.getUser(email);
-        
-        if (!user || user.password !== password) {
-          throw new Error('Email ou senha inválidos');
+        const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user, password: pass }),
+        });
+        const data = await res.json();
+        if (res.ok && data.access_token) {
+          localStorage.setItem("access_token", data.access_token);
+          errorEl.textContent = '';
+          document.getElementById('login-container').style.display = 'none';
+          document.getElementById('system-content').style.display = 'block';
+          document.getElementById('username-display').textContent = user.name;
+          document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
+          
+          // Exibir estoque e gráfico
+          viewInventory();
+          updateChart();
+        } else {
+          errorEl.textContent = data.error || "Login falhou";
         }
-        
-        errorEl.textContent = '';
-        document.getElementById('login-container').style.display = 'none';
-        document.getElementById('system-content').style.display = 'block';
-        document.getElementById('username-display').textContent = user.name;
-        document.getElementById('user-avatar').textContent = user.name.charAt(0).toUpperCase();
-        
-        // Exibir estoque e gráfico
-        viewInventory();
-        updateChart();
       } catch (error) {
         errorEl.textContent = error.message;
       }
@@ -1432,22 +1476,19 @@
       }
       
       try {
-        // Verificar se usuário já existe
-        const existingUser = await database.getUser(email);
-        if (existingUser) {
-          throw new Error('Email já registrado');
-        }
-        
-        // Registrar novo usuário
-        await database.registerUser({
-          name: name,
-          email: email,
-          password: password
+        const res = await fetch(`${API_BASE_URL}/api/auth/register`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username: user, password: pass }),
         });
-        
-        errorEl.textContent = '';
-        showToast('Conta criada com sucesso! Faça login para continuar.');
-        showLoginForm();
+        const data = await res.json();
+
+        if (res.status === 201) {
+          showToast('Conta criada com sucesso! Faça login para continuar.');
+          showLoginForm();
+        } else {
+          errorEl.textContent = data.error || "Erro ao registrar.";
+        }
         
         // Limpar formulário
         document.getElementById('reg-name').value = '';

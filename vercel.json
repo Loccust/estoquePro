@@ -12,21 +12,21 @@
     }
   ],
   "routes": [
- {
+    {
       "src": "/apidocs(.*)",
-      "dest": "/backend/src/main.py"
+      "dest": "/backend/main.py"
     },
     {
       "src": "/apispec_1.json",
-      "dest": "/backend/src/main.py"
+      "dest": "/backend/main.py"
     },
     {
       "src": "/flasgger_static/(.*)",
-      "dest": "/backend/src/main.py"
+      "dest": "/backend/main.py"
     },
     {
-      "src": "/api/(.*)",
-      "dest": "/backend/src/main.py"
+      "src": "/api/(.*)",      
+      "dest": "/backend/main.py"
     },
     {
       "src": "/(.*)",
